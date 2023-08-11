@@ -1,9 +1,9 @@
 import { fetchDataFromApi } from "../utils/api";
 import { createContext, useState, useEffect } from "react";
-const context = createContext();
+export const context = createContext();
 export const AppContext = (props) => {
   const [loading, setLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
   const [selectCategories, setSelectCategories] = useState("New");
   const [mobileMenu, setMobileMenu] = useState(false);
   useEffect(() => {
@@ -11,8 +11,9 @@ export const AppContext = (props) => {
   }, [selectCategories]);
   const fetchSelectedCategoryData = (query) => {
     setLoading(true);
-    fetchDataFromApi(`search/?q=${query}`).then((res) => {
-      console.log(res);
+    fetchDataFromApi(`search/?q=${query}`).then(({ contents }) => {
+      setSearchResults(contents);
+      setLoading(false);
     });
   };
   return (
